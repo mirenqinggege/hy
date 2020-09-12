@@ -1,0 +1,32 @@
+spring:
+  datasource:
+    druid:
+      username: user
+      password: 1650697374
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://49.233.37.190:3306/hy?serverTimezone=GMT%2B8&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+      type: com.alibaba.druid.pool.DruidDataSource
+      # 初始化连接池数量
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      # 配置获取连接等待时间
+      max-wait: 60000
+      # 检测间隔 检测需要关闭的连接
+      time-between-eviction-runs-millis: 60000
+      # 配置一个连接在池中最小生存时间
+      min-evictable-idle-time-millis: 30000
+      validation-query: SELECT 1 FORM DUAL
+      test-on-borrow: true
+      test-while-idle: true
+      test-on-return: false
+      pool-prepared-statements: false
+      max-pool-prepared-statement-per-connection-size: 20
+      filter:
+        stat:
+          merge-sql: true
+          slow-sql-millis: 5000
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+

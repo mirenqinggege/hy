@@ -1,1 +1,6 @@
+server:
+  port: 20912
 
+spring:
+  profiles:
+    active: druid
