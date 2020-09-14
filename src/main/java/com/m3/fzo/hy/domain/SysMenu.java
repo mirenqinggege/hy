@@ -4,7 +4,8 @@ import com.m3.fzo.hy.common.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -14,6 +15,8 @@ public class SysMenu extends BaseEntity {
     private Long menuId ;
     /** 父菜单id */
     private Long parentId ;
+    /** 排序 */
+    private Integer orderNum;
     /** 菜单名 */
     private String name ;
     /** 链接 */
@@ -22,8 +25,6 @@ public class SysMenu extends BaseEntity {
     private String icon ;
     /** 状态 */
     private String status ;
-    /** 创建时间 */
-    private Date createdTime ;
-    /** 更新时间 */
-    private Date updatedTime ;
+    /** 子菜单 */
+    private List<SysMenu> child = new ArrayList<>();
 }

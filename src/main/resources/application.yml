@@ -4,3 +4,6 @@ server:
 spring:
   profiles:
     active: druid
+
+mybatis:
+  mapper-locations: classpath*:/mapper/*Mapper.xml
