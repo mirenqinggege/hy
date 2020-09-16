@@ -5,18 +5,20 @@
 <mapper namespace="com.m3.fzo.hy.mapper.SysMenuMapper">
     <resultMap id="BaseResultMap" type="com.m3.fzo.hy.domain.SysMenu">
         <id column="menu_id" javaType="java.lang.Long" property="menuId"/>
-        <result column="parent_id" javaType="java.lang.Long" property="parentId"/>
         <result column="name" javaType="java.lang.String" property="name"/>
-        <result column="order_num" javaType="java.lang.Integer" property="orderNum"/>
-        <result column="link" javaType="java.lang.String" property="link"/>
+        <result column="path" javaType="java.lang.String" property="path"/>
+        <result column="type" javaType="java.lang.String" property="type"/>
         <result column="icon" javaType="java.lang.String" property="icon"/>
         <result column="status" javaType="java.lang.String" property="status"/>
+        <result column="parent_id" javaType="java.lang.Long" property="parentId"/>
+        <result column="order_num" javaType="java.lang.Integer" property="orderNum"/>
+        <result column="component" javaType="java.lang.String" property="component"/>
         <result column="create_time" javaType="java.util.Date" property="createTime"/>
         <result column="update_time" javaType="java.util.Date" property="updateTime"/>
     </resultMap>
 
     <sql id="selectVo">
-        select menu_id, parent_id, order_num, name, link, icon, status, create_time, update_time from Sys_menu
+        select menu_id, parent_id, order_num, name, path, type, icon, component, target, status, create_time, update_time from sys_menu
     </sql>
 
     <select id="selectMenuByParentIdIsNull" resultMap="BaseResultMap">

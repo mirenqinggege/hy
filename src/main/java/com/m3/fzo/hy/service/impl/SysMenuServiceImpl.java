@@ -34,5 +34,6 @@ public class SysMenuServiceImpl implements ISysMenuService {
         }
         menus.forEach(this::getChildMenu);
         menu.setChild(menus);
+        menu.setHasChildren(true);
     }
 }
