@@ -16,4 +16,18 @@ public interface SysMenuMapper {
      * @return 菜单集合
      */
     List<SysMenu> selectMenuByParentId(Long parentId);
+
+    /**
+     * 根据id获取菜单
+     * @param menuId id
+     * @return 菜单
+     */
+    SysMenu selectMenuById(Long menuId);
+
+    /**
+     * 根据id修改菜单属性
+     * @param menu 菜单
+     * @return 是否成功
+     */
+    int updateByPrimaryKey(SysMenu menu);
 }

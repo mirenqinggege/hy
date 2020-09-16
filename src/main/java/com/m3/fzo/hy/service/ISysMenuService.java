@@ -10,4 +10,18 @@ public interface ISysMenuService {
      * @return 菜单集合
      */
     List<SysMenu> getMenus();
+
+    /**
+     * 根据id获取菜单
+     * @param menuId id
+     * @return 菜单
+     */
+    SysMenu getMenuById(Long menuId);
+
+    /**
+     * 根据主键修改菜单
+     * @param menu 菜单
+     * @return 是否成功
+     */
+    int update(SysMenu menu);
 }

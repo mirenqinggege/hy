@@ -5,6 +5,7 @@ import com.m3.fzo.hy.mapper.SysMenuMapper;
 import com.m3.fzo.hy.service.ISysMenuService;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -35,5 +36,28 @@ public class SysMenuServiceImpl implements ISysMenuService {
         menus.forEach(this::getChildMenu);
         menu.setChild(menus);
         menu.setHasChildren(true);
+    }
+
+    /**
+     * 根据id获取菜单
+     *
+     * @param menuId id
+     * @return 菜单
+     */
+    @Override
+    public SysMenu getMenuById(Long menuId) {
+        return menuMapper.selectMenuById(menuId);
+    }
+
+    /**
+     * 根据主键修改菜单
+     *
+     * @param menu 菜单
+     * @return 是否成功
+     */
+    @Override
+    public int update(SysMenu menu) {
+        menu.setUpdateTime(Calendar.getInstance().getTime());
+        return menuMapper.updateByPrimaryKey(menu);
     }
 }

@@ -20,6 +20,10 @@
     <sql id="selectVo">
         select menu_id, parent_id, order_num, name, path, type, icon, component, target, status, create_time, update_time from sys_menu
     </sql>
+    <update id="updateByPrimaryKey" parameterType="com.m3.fzo.hy.domain.SysMenu">
+        update sys_menu set parent_id = #{parentId}, order_num = #{orderNum}, name = #{name}, path = #{path}, type = #{type}, icon = #{icon}, component = #{component}, target = #{target}, status = #{status}, create_time = #{createTime}, update_time = #{updateTime}
+        where menu_id = #{menuId}
+    </update>
 
     <select id="selectMenuByParentIdIsNull" resultMap="BaseResultMap">
         <include refid="selectVo"/>
@@ -35,5 +39,10 @@
             parent_id = #{parentId}
         </where>
         order by order_num
+    </select>
+
+    <select id="selectMenuById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        <include refid="selectVo"/>
+        where menu_id = #{menuId}
     </select>
 </mapper>
