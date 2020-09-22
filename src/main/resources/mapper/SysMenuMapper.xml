@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.m3.fzo.hy.mapper.SysMenuMapper">
-    <resultMap id="BaseResultMap" type="com.m3.fzo.hy.domain.SysMenu">
+    <resultMap id="BaseResultMap" type="com.m3.fzo.hy.domain.system.SysMenu">
         <id column="menu_id" javaType="java.lang.Long" property="menuId"/>
         <result column="name" javaType="java.lang.String" property="name"/>
         <result column="path" javaType="java.lang.String" property="path"/>
@@ -11,19 +11,52 @@
         <result column="icon" javaType="java.lang.String" property="icon"/>
         <result column="status" javaType="java.lang.String" property="status"/>
         <result column="parent_id" javaType="java.lang.Long" property="parentId"/>
+        <result column="parent_name" javaType="java.lang.String" property="parentName"/>
         <result column="order_num" javaType="java.lang.Integer" property="orderNum"/>
         <result column="component" javaType="java.lang.String" property="component"/>
         <result column="create_time" javaType="java.util.Date" property="createTime"/>
         <result column="update_time" javaType="java.util.Date" property="updateTime"/>
+        <result column="has_children" javaType="java.lang.Boolean" property="hasChildren"/>
     </resultMap>
 
     <sql id="selectVo">
-        select menu_id, parent_id, order_num, name, path, type, icon, component, target, status, create_time, update_time from sys_menu
+        select menu_id,
+               parent_id,
+               order_num,
+               (select count(`name`) from sys_menu ssm where ssm.parent_id = sm.menu_id) > 0 has_children,
+               ifnull((select `name` from sys_menu ssm where ssm.menu_id = sm.parent_id),"顶级目录") parent_name,
+               `name`,
+               `path`,
+               `type`,
+               icon,
+               component,
+               target,
+               `status`,
+               create_time,
+               update_time
+        from sys_menu sm
     </sql>
-    <update id="updateByPrimaryKey" parameterType="com.m3.fzo.hy.domain.SysMenu">
-        update sys_menu set parent_id = #{parentId}, order_num = #{orderNum}, name = #{name}, path = #{path}, type = #{type}, icon = #{icon}, component = #{component}, target = #{target}, status = #{status}, create_time = #{createTime}, update_time = #{updateTime}
+    <insert id="insert" parameterType="com.m3.fzo.hy.domain.system.SysMenu">
+        insert into sys_menu(parent_id, order_num, name, path, type, icon, component, target, status, create_time)
+        values (#{parentId}, #{orderNum}, #{name}, #{path}, #{type}, #{icon}, #{component}, #{target}, #{status}, now())
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.m3.fzo.hy.domain.system.SysMenu">
+        update sys_menu
+        set parent_id   = #{parentId},
+            order_num   = #{orderNum},
+            name        = #{name},
+            path        = #{path},
+            type        = #{type},
+            icon        = #{icon},
+            component   = #{component},
+            target      = #{target},
+            status      = #{status},
+            update_time = now()
         where menu_id = #{menuId}
     </update>
+    <delete id="deleteByMenuId" parameterType="java.lang.Long">
+        delete from sys_menu where menu_id = #{menuId}
+    </delete>
 
     <select id="selectMenuByParentIdIsNull" resultMap="BaseResultMap">
         <include refid="selectVo"/>
@@ -32,7 +65,7 @@
         </where>
         order by order_num
     </select>
-    
+
     <select id="selectMenuByParentId" resultMap="BaseResultMap" parameterType="java.lang.Long">
         <include refid="selectVo"/>
         <where>
@@ -44,5 +77,46 @@
     <select id="selectMenuById" resultMap="BaseResultMap" parameterType="java.lang.Long">
         <include refid="selectVo"/>
         where menu_id = #{menuId}
+        order by parent_id, order_num
+    </select>
+
+    <select id="selectMenu" resultMap="BaseResultMap" parameterType="com.m3.fzo.hy.domain.system.SysMenu">
+        <include refid="selectVo"/>
+        <where>
+            <if test="parentId != null">
+                and parent_id = #{parentId}
+            </if>
+            <if test="orderNum != null">
+                and order_num = #{orderNum}
+            </if>
+            <if test="name != null and name != ''">
+                and `name` = #{name}
+            </if>
+            <if test="path != null and path != ''">
+                and `path` = #{path}
+            </if>
+            <if test="type != null and type != ''">
+                and `type` = #{type}
+            </if>
+            <if test="icon != null and icon != ''">
+                and `icon` = #{icon}
+            </if>
+            <if test="component != null and component != ''">
+                and `component` = #{component}
+            </if>
+            <if test="target != null and target != ''">
+                and `target` = #{target}
+            </if>
+            <if test="status != null and status != ''">
+                and `status` = #{status}
+            </if>
+            <if test="createTime != null">
+                and `create_time` = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and `update_time` = #{updateTime}
+            </if>
+        </where>
+        order by order_num
     </select>
 </mapper>

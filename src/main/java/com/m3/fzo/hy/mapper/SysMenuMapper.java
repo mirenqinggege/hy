@@ -1,6 +1,6 @@
 package com.m3.fzo.hy.mapper;
 
-import com.m3.fzo.hy.domain.SysMenu;
+import com.m3.fzo.hy.domain.system.SysMenu;
 
 import java.util.List;
 
@@ -25,9 +25,31 @@ public interface SysMenuMapper {
     SysMenu selectMenuById(Long menuId);
 
     /**
+     * 查询菜单列表
+     * @param menu
+     * @return
+     */
+    List<SysMenu> selectMenu(SysMenu menu);
+
+    /**
      * 根据id修改菜单属性
      * @param menu 菜单
      * @return 是否成功
      */
     int updateByPrimaryKey(SysMenu menu);
+
+    /**
+     * 保存菜单信息
+     * @param menu 菜单
+     * @return 执行结果 1成功 0失败
+     */
+    int insert(SysMenu menu);
+
+    /**
+     * 根据id删除菜单
+     *
+     * @param menuId 菜单id
+     * @return 执行结果 1成功 0失败
+     */
+    int deleteByMenuId(Long menuId);
 }

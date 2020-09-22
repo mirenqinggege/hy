@@ -1,4 +1,4 @@
-package com.m3.fzo.hy.domain;
+package com.m3.fzo.hy.domain.system;
 
 import com.m3.fzo.hy.common.BaseEntity;
 import lombok.Data;
@@ -15,6 +15,8 @@ public class SysMenu extends BaseEntity {
     private Long menuId;
     /** 父菜单id */
     private Long parentId;
+    /** 父菜单名称 */
+    private String parentName;
     /** 排序 */
     private Integer orderNum;
     /** 菜单名 */
