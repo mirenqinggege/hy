@@ -11,14 +11,14 @@ import java.util.Random;
 
 @Component
 public class VerifyCode {
-    private final int w = 80;
+    private final int w = 100;
     private final int h = 40;
     private final Random r = new Random();
     // {"宋体", "华文楷体", "黑体", "华文新魏", "华文隶书", "微软雅黑", "楷体_GB2312"}
     private final String[] fontNames =
             { "宋体", "华文楷体", "黑体", "微软雅黑", "楷体_GB2312" };
     // 背景色
-    private final Color bgColor = new Color(255, 255, 255);
+    private final Color bgColor = new Color(192,196,204);
     // 验证码上的文本
     private String text;
 

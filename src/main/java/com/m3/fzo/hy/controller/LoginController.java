@@ -1,5 +1,6 @@
 package com.m3.fzo.hy.controller;
 
+import cn.hutool.core.lang.Console;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.m3.fzo.hy.common.AjaxResult;
@@ -8,17 +9,16 @@ import com.m3.fzo.hy.common.util.Base64Utils;
 import com.m3.fzo.hy.common.util.Constants;
 import com.m3.fzo.hy.common.util.RedisUtils;
 import com.m3.fzo.hy.common.util.VerifyCode;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -45,10 +45,35 @@ public class LoginController extends BaseController {
         String code = vc.getText();
         String uuid = IdUtil.simpleUUID();
         ru.setEx(uuid, code, 5, TimeUnit.MINUTES);
-        response.setHeader(Constants.VerifyCodeKey, uuid);
         ImageIO.write(image, "JPEG", outputStream);
         String s = "data:image/jpeg;base64," + Base64Utils.ImageToBase64ByLocal(outputStream.toByteArray());
         outputStream.close();
-        return AjaxResult.success("获取验证码成功", s);
+        Map<String, String> map = new HashMap<>(2);
+        map.put("captcha", s);
+        map.put(Constants.VerifyCodeKey, uuid);
+        return AjaxResult.success("获取验证码成功", map);
+    }
+
+    /**
+     * 登录方法
+     * @param request 请求
+     * @return 结果
+     */
+    @PostMapping()
+    public AjaxResult login(HttpServletRequest request){
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String code = request.getParameter("code");
+        String header = request.getHeader(Constants.VerifyCodeKey);
+        String realCode;
+        if (StrUtil.isEmpty(header) || StrUtil.isEmpty((realCode = ru.get(header)))) {
+            return AjaxResult.error("验证码已过期");
+        }
+        if (!realCode.equalsIgnoreCase(code)) {
+            return AjaxResult.error("验证码错误");
+        } else {
+            ru.delete(header);
+        }
+        return AjaxResult.success("登录成功！");
     }
 }
