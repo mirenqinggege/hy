@@ -1,12 +1,11 @@
 package com.m3.fzo.hy.controller;
 
-import cn.hutool.core.lang.Console;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.m3.fzo.hy.common.AjaxResult;
 import com.m3.fzo.hy.common.BaseController;
+import com.m3.fzo.hy.common.Constant;
 import com.m3.fzo.hy.common.util.Base64Utils;
-import com.m3.fzo.hy.common.util.Constants;
 import com.m3.fzo.hy.common.util.RedisUtils;
 import com.m3.fzo.hy.common.util.VerifyCode;
 import org.springframework.web.bind.annotation.*;
@@ -50,7 +49,7 @@ public class LoginController extends BaseController {
         outputStream.close();
         Map<String, String> map = new HashMap<>(2);
         map.put("captcha", s);
-        map.put(Constants.VerifyCodeKey, uuid);
+        map.put(Constant.VERIFY_CODE_KEY, uuid);
         return AjaxResult.success("获取验证码成功", map);
     }
 
@@ -64,7 +63,7 @@ public class LoginController extends BaseController {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String code = request.getParameter("code");
-        String header = request.getHeader(Constants.VerifyCodeKey);
+        String header = request.getHeader(Constant.VERIFY_CODE_KEY);
         String realCode;
         if (StrUtil.isEmpty(header) || StrUtil.isEmpty((realCode = ru.get(header)))) {
             return AjaxResult.error("验证码已过期");
