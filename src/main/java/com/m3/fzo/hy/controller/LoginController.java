@@ -1,12 +1,15 @@
 package com.m3.fzo.hy.controller;
 
+import cn.hutool.core.lang.Console;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.m3.fzo.hy.common.AjaxResult;
 import com.m3.fzo.hy.common.BaseController;
 import com.m3.fzo.hy.common.Constant;
+import com.m3.fzo.hy.common.exception.UserException;
 import com.m3.fzo.hy.common.util.Base64Utils;
 import com.m3.fzo.hy.common.util.RedisUtils;
+import com.m3.fzo.hy.common.util.TokenUtil;
 import com.m3.fzo.hy.common.util.VerifyCode;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,10 +30,12 @@ public class LoginController extends BaseController {
     // 验证码
     private final VerifyCode vc;
     private final RedisUtils ru;
+    private final TokenUtil tu;
 
-    public LoginController(VerifyCode vc, RedisUtils ru) {
+    public LoginController(VerifyCode vc, RedisUtils ru, TokenUtil tu) {
         this.vc = vc;
         this.ru = ru;
+        this.tu = tu;
     }
 
     /**
@@ -59,9 +64,8 @@ public class LoginController extends BaseController {
      * @return 结果
      */
     @PostMapping()
-    public AjaxResult login(HttpServletRequest request){
+    public AjaxResult login(HttpServletRequest request, HttpServletResponse response){
         String username = request.getParameter("username");
-        String password = request.getParameter("password");
         String code = request.getParameter("code");
         String header = request.getHeader(Constant.VERIFY_CODE_KEY);
         String realCode;
@@ -73,6 +77,13 @@ public class LoginController extends BaseController {
         } else {
             ru.delete(header);
         }
-        return AjaxResult.success("登录成功！");
+        String token = Constant.USER_TOKEN_KEY + ",";
+        try {
+            token += tu.generateToken(request);
+        } catch (UserException e) {
+            Console.log(e.getMsg(), e.getData());
+            return AjaxResult.error(e);
+        }
+        return AjaxResult.success("登录成功！", token);
     }
 }

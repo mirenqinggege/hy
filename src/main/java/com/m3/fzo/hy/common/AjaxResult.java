@@ -1,6 +1,7 @@
 package com.m3.fzo.hy.common;
 
 import com.m3.fzo.hy.common.enums.ResponseCode;
+import com.m3.fzo.hy.common.exception.UserException;
 import com.m3.fzo.hy.common.util.ruoyi.StringUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -60,6 +61,10 @@ public class AjaxResult extends HashMap<String, Object> {
 
     public static AjaxResult error(String code, String msg, Object data) {
         return new AjaxResult(code, msg, data);
+    }
+
+    public static AjaxResult error(UserException e){
+        return error(e.getCode(), e.getMsg(), e.getData());
     }
 
     public static AjaxResult error(String msg, Object data){
