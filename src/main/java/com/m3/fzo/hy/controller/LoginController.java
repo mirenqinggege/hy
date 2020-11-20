@@ -64,8 +64,7 @@ public class LoginController extends BaseController {
      * @return 结果
      */
     @PostMapping()
-    public AjaxResult login(HttpServletRequest request, HttpServletResponse response){
-        String username = request.getParameter("username");
+    public AjaxResult login(HttpServletRequest request){
         String code = request.getParameter("code");
         String header = request.getHeader(Constant.VERIFY_CODE_KEY);
         String realCode;

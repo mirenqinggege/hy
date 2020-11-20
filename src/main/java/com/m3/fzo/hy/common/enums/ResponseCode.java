@@ -13,6 +13,9 @@ public enum ResponseCode {
     ACCOUNT_ERROR("B0300","账号异常"),
     ACCOUNT_FREEZE("B0310", "账号被冻结"),
     ACCOUNT_DO_LOGIN_COUNT("B0311", "账号尝试登陆次数过多"),
+    USERNAME_OR_PASSWORD_IS_NULL("B0320", "用户名和密码不能为空！"),
+    /*登录状态异常*/
+    LOGIN_EXPIRY("B0340", "登录状态过期，请重新登录！"),
     /*手机号异常*/
     PHONE_NUMBER_ERROR("B0400", "手机号异常"),
     PHONE_NUMBER_REPETITION("B0410", "手机号已存在");
